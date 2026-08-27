@@ -1,0 +1,1358 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: products
+    description: Product catalog operations
+  - name: Storage
+    description: Object storage upload and serving endpoints.
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /products:
+    get:
+      operationId: listProducts
+      tags: [products]
+      summary: List all products
+      description: Returns all products in the catalog
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+    post:
+      operationId: createProduct
+      tags: [products]
+      summary: Create a product
+      description: Add a new product to the catalog (admin only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Invalid input
+
+  /products/{id}:
+    get:
+      operationId: getProduct
+      tags: [products]
+      summary: Get a product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+
+    put:
+      operationId: updateProduct
+      tags: [products]
+      summary: Update a product
+      description: Update an existing product (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductUpdate"
+      responses:
+        "200":
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Invalid input
+        "404":
+          description: Product not found
+
+    delete:
+      operationId: deleteProduct
+      tags: [products]
+      summary: Delete a product
+      description: Remove a product from the catalog (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "204":
+          description: Product deleted
+        "404":
+          description: Product not found
+
+  /products/slug/{slug}:
+    get:
+      operationId: getProductBySlug
+      tags: [products]
+      summary: Get a product by its public slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+
+  /products/{id}/sold:
+    post:
+      operationId: recordProductSale
+      tags: [products]
+      summary: Adjust sold count for a product (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Sold count updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+
+  /admin/products:
+    get:
+      operationId: listAdminProducts
+      tags: [products]
+      summary: List all products including unpublished (admin only)
+      responses:
+        "200":
+          description: List of all products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+  /admin/products/{id}/published:
+    patch:
+      operationId: setProductPublished
+      tags: [products]
+      summary: Toggle product published state (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetProductPublished"
+      responses:
+        "200":
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+
+  /categories:
+    get:
+      operationId: listCategories
+      tags: [products]
+      summary: List all categories
+      responses:
+        "200":
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
+  /admin/categories:
+    post:
+      operationId: createCategory
+      tags: [products]
+      summary: Create a category (admin only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryInput"
+      responses:
+        "201":
+          description: Category created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "400":
+          description: Invalid input
+
+  /admin/categories/{id}:
+    delete:
+      operationId: deleteCategory
+      tags: [products]
+      summary: Delete a category (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /admin/promo-codes:
+    get:
+      operationId: listPromoCodes
+      tags: [products]
+      summary: List all promo codes (admin only)
+      responses:
+        "200":
+          description: List of promo codes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PromoCode"
+    post:
+      operationId: createPromoCode
+      tags: [products]
+      summary: Create a promo code (admin only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PromoCodeInput"
+      responses:
+        "201":
+          description: Promo code created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PromoCode"
+        "400":
+          description: Invalid input
+
+  /admin/promo-codes/{id}:
+    delete:
+      operationId: deletePromoCode
+      tags: [products]
+      summary: Delete a promo code (admin only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /promo-codes/validate:
+    post:
+      operationId: validatePromoCode
+      tags: [products]
+      summary: Validate a promo code against cart products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidatePromoCodeRequest"
+      responses:
+        "200":
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PromoValidationResult"
+
+  /orders:
+    post:
+      operationId: createOrder
+      tags: [orders]
+      summary: Create an order for the signed-in customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderInput"
+      responses:
+        "201":
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: Invalid order
+        "401":
+          description: Sign-in required
+
+  /orders/me:
+    get:
+      operationId: listMyOrders
+      tags: [orders]
+      summary: List orders for the signed-in customer
+      responses:
+        "200":
+          description: Customer order history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        "401":
+          description: Sign-in required
+
+  /cashback/me:
+    get:
+      operationId: getMyCashback
+      tags: [cashback]
+      summary: Get the signed-in customer's cashback balance and history
+      responses:
+        "200":
+          description: Cashback account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyCashback"
+        "401":
+          description: Sign-in required
+
+  /admin/cashback/pending:
+    get:
+      operationId: listPendingCashback
+      tags: [cashback]
+      summary: List cashback credits awaiting manual approval
+      responses:
+        "200":
+          description: Pending cashback transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AdminCashbackTransaction"
+        "401":
+          description: Admin sign-in required
+
+  /referral/me:
+    get:
+      operationId: getMyReferral
+      tags: [cashback]
+      summary: Get the signed-in customer's referral code and successful referral count
+      responses:
+        "200":
+          description: Referral account
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [referralCode, referralCount]
+                properties:
+                  referralCode: { type: string }
+                  referralCount: { type: number }
+        "401": { description: Sign-in required }
+
+  /admin/users:
+    get:
+      operationId: listAdminUsers
+      tags: [admin]
+      summary: List customers and cashback balances
+      responses:
+        "200":
+          description: Customer list
+        "401": { description: Admin sign-in required }
+
+  /admin/users/{customerId}/cashback:
+    post:
+      operationId: adjustUserCashback
+      tags: [admin, cashback]
+      summary: Add or deduct cashback for a customer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount, currency, operation]
+              properties:
+                amount: { type: number, minimum: 0.01 }
+                currency: { type: string, enum: [EGP, USD] }
+                operation: { type: string, enum: [add, deduct] }
+      responses:
+        "201": { description: Cashback adjusted }
+        "409": { description: Deduction exceeds available balance }
+        "401": { description: Admin sign-in required }
+
+  /admin/cashback/{id}/approve:
+    post:
+      operationId: approveCashback
+      tags: [cashback]
+      summary: Approve a pending cashback credit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Approved cashback transaction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminCashbackTransaction"
+        "404":
+          description: Pending cashback transaction not found
+        "401":
+          description: Admin sign-in required
+
+  /admin/orders:
+    get:
+      operationId: listAdminOrders
+      tags: [orders]
+      summary: Search orders as an admin
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Matching orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        "401":
+          description: Admin sign-in required
+
+  /admin/orders/{id}/status:
+    patch:
+      operationId: updateOrderStatus
+      tags: [orders]
+      summary: Update an order status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderStatusUpdate"
+      responses:
+        "200":
+          description: Updated order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Order not found
+
+  /admin/dashboard:
+    get:
+      operationId: getAdminDashboard
+      tags: [orders]
+      summary: Get store sales and visitor analytics
+      responses:
+        "200":
+          description: Dashboard metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminDashboard"
+
+  /admin/analytics/visits:
+    get:
+      operationId: getAdminVisitsAnalytics
+      tags: [orders]
+      summary: Get date-filtered visitor analytics
+      parameters:
+        - $ref: "#/components/parameters/AnalyticsPreset"
+        - $ref: "#/components/parameters/AnalyticsStartDate"
+        - $ref: "#/components/parameters/AnalyticsEndDate"
+      responses:
+        "200":
+          description: Visitor analytics for the selected period
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisitsAnalytics"
+        "400":
+          description: Invalid date range
+
+  /admin/analytics/sales:
+    get:
+      operationId: getAdminSalesAnalytics
+      tags: [orders]
+      summary: Get date-filtered sales analytics
+      parameters:
+        - $ref: "#/components/parameters/AnalyticsPreset"
+        - $ref: "#/components/parameters/AnalyticsStartDate"
+        - $ref: "#/components/parameters/AnalyticsEndDate"
+      responses:
+        "200":
+          description: Sales analytics for the selected period
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SalesAnalytics"
+        "400":
+          description: Invalid date range
+
+  /analytics/visit:
+    post:
+      operationId: recordVisit
+      tags: [analytics]
+      summary: Record an anonymous storefront visit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VisitInput"
+      responses:
+        "200":
+          description: Visit recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisitResult"
+
+  /storage/uploads/request-url:
+    post:
+      tags: [Storage]
+      operationId: requestUploadUrl
+      summary: Request a presigned URL for file upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadUrlRequest'
+      responses:
+        '200':
+          description: Presigned upload URL generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadUrlResponse'
+        '400':
+          description: Missing or invalid required fields.
+        '500':
+          description: Failed to generate upload URL.
+
+  /storage/objects/{objectPath}:
+    get:
+      tags: [Storage]
+      operationId: getStorageObject
+      summary: Serve an uploaded object
+      parameters:
+        - name: objectPath
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Object content.
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Object not found.
+
+components:
+  parameters:
+    AnalyticsPreset:
+      name: preset
+      in: query
+      required: false
+      schema:
+        type: string
+        enum: [today, yesterday, last_week, last_2_weeks, last_month, last_3_months, last_6_months, year, custom]
+        default: last_month
+    AnalyticsStartDate:
+      name: startDate
+      in: query
+      required: false
+      schema:
+        type: string
+    AnalyticsEndDate:
+      name: endDate
+      in: query
+      required: false
+      schema:
+        type: string
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    OrderItemInput:
+      type: object
+      required: [productId, duration, quantity]
+      properties:
+        productId:
+          type: number
+        duration:
+          type: string
+        quantity:
+          type: number
+          minimum: 1
+          maximum: 10
+        price:
+          type: number
+          minimum: 0
+
+    OrderInput:
+      type: object
+      required: [customerName, customerEmail, customerPhone, currency, idempotencyKey, items]
+      properties:
+        customerName:
+          type: string
+          minLength: 1
+        customerEmail:
+          type: string
+        customerPhone:
+          type: string
+          minLength: 3
+        currency:
+          type: string
+          enum: [EGP, USD]
+        idempotencyKey:
+          type: string
+          minLength: 16
+          maxLength: 100
+        promoCode:
+          type: ["string", "null"]
+        paymentMethod:
+          type: ["string", "null"]
+        cashbackAmount:
+          type: number
+          minimum: 0
+        referralCode:
+          type: string
+          maxLength: 32
+        items:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            $ref: "#/components/schemas/OrderItemInput"
+
+    OrderItem:
+      type: object
+      required: [id, productId, productName, duration, unitPrice, quantity, lineTotal]
+      properties:
+        id:
+          type: number
+        productId:
+          type: number
+        productName:
+          type: string
+        coverImageUrl:
+          type: ["string", "null"]
+        duration:
+          type: string
+        unitPrice:
+          type: number
+        quantity:
+          type: number
+        lineTotal:
+          type: number
+
+    Order:
+      type: object
+      required: [id, orderNumber, customerName, customerEmail, customerPhone, currency, subtotal, discount, total, status, items, createdAt, updatedAt]
+      properties:
+        id:
+          type: number
+        orderNumber:
+          oneOf:
+            - type: string
+            - type: number
+        customerName:
+          type: string
+        customerEmail:
+          type: string
+        customerPhone:
+          type: string
+        currency:
+          type: string
+        subtotal:
+          type: number
+        discount:
+          type: number
+        total:
+          type: number
+        promoCode:
+          type: ["string", "null"]
+        paymentMethod:
+          type: ["string", "null"]
+        status:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItem"
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    OrderStatusUpdate:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [awaiting_payment, payment_proof_received, confirmed, fulfilled, cancelled]
+
+    CashbackBalance:
+      type: object
+      required: [currency, pending, available]
+      properties:
+        currency:
+          type: string
+          enum: [EGP, USD]
+        pending:
+          type: number
+        available:
+          type: number
+
+    CashbackTransaction:
+      type: object
+      required: [id, orderId, type, status, currency, amount, createdAt, approvedAt]
+      properties:
+        id:
+          type: number
+        orderId:
+          type: ["number", "null"]
+        orderNumber:
+          oneOf:
+            - type: string
+            - type: number
+          nullable: true
+        type:
+          type: string
+          enum: [credit, debit]
+        status:
+          type: string
+          enum: [pending, available, redeemed, voided, reversed]
+        currency:
+          type: string
+          enum: [EGP, USD]
+        amount:
+          type: number
+        createdAt:
+          type: string
+        approvedAt:
+          type: [string, "null"]
+
+    MyCashback:
+      type: object
+      required: [balances, transactions]
+      properties:
+        balances:
+          type: array
+          items:
+            $ref: "#/components/schemas/CashbackBalance"
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/CashbackTransaction"
+
+    AdminCashbackTransaction:
+      allOf:
+        - $ref: "#/components/schemas/CashbackTransaction"
+        - type: object
+          required: [customerName, customerEmail]
+          properties:
+            customerName:
+              type: string
+            customerEmail:
+              type: string
+
+    VisitInput:
+      type: object
+      required: [path]
+      properties:
+        path:
+          type: string
+          minLength: 1
+        productId:
+          type: ["number", "null"]
+        visitorId:
+          type: ["string", "null"]
+
+    VisitResult:
+      type: object
+      required: [country, currency]
+      properties:
+        country:
+          type: string
+        currency:
+          type: string
+          enum: [EGP, USD]
+
+    DashboardTrend:
+      type: object
+      required: [date, orders, sales, visits]
+      properties:
+        date:
+          type: string
+        orders:
+          type: number
+        sales:
+          type: number
+        visits:
+          type: number
+
+    AnalyticsDateRange:
+      type: object
+      required: [preset, startDate, endDate]
+      properties:
+        preset:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+
+    AnalyticsTrend:
+      type: object
+      required: [date, visits, orders, sales, salesUsd]
+      properties:
+        date:
+          type: string
+        visits:
+          type: number
+        orders:
+          type: number
+        sales:
+          type: number
+        salesUsd:
+          type: number
+
+    VisitsAnalytics:
+      type: object
+      required: [range, totalVisits, countries, trends]
+      properties:
+        range:
+          $ref: "#/components/schemas/AnalyticsDateRange"
+        totalVisits:
+          type: number
+        countries:
+          type: array
+          items:
+            type: object
+            required: [country, visits]
+            properties:
+              country:
+                type: string
+              visits:
+                type: number
+        trends:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnalyticsTrend"
+
+    SalesAnalytics:
+      type: object
+      required: [range, totalOrders, totalSales, totalSalesUsd, trends]
+      properties:
+        range:
+          $ref: "#/components/schemas/AnalyticsDateRange"
+        totalOrders:
+          type: number
+        totalSales:
+          type: number
+        totalSalesUsd:
+          type: number
+        trends:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnalyticsTrend"
+
+    AdminDashboard:
+      type: object
+      required: [totalSales, totalSalesUsd, totalOrders, totalVisits, countries, popularProducts, trends]
+      properties:
+        totalSales:
+          type: number
+        totalSalesUsd:
+          type: number
+        totalOrders:
+          type: number
+        totalVisits:
+          type: number
+        countries:
+          type: array
+          items:
+            type: object
+            required: [country, visits]
+            properties:
+              country:
+                type: string
+              visits:
+                type: number
+        popularProducts:
+          type: array
+          items:
+            type: object
+            required: [productId, productName, views, sold]
+            properties:
+              productId:
+                type: number
+              productName:
+                type: string
+              views:
+                type: number
+              sold:
+                type: number
+        trends:
+          type: array
+          items:
+            $ref: "#/components/schemas/DashboardTrend"
+
+    PricingOption:
+      type: object
+      required: [duration, price]
+      properties:
+        duration:
+          type: string
+        price:
+          type: number
+          minimum: 0
+        salePrice:
+          type: ["number", "null"]
+        priceUsd:
+          type: ["number", "null"]
+          minimum: 0
+        salePriceUsd:
+          type: ["number", "null"]
+          minimum: 0
+
+    Product:
+      type: object
+      required:
+        - id
+        - name
+        - slug
+        - price
+        - duration
+        - availability
+        - badges
+        - createdAt
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        slug:
+          type: string
+        category:
+          type: ["string", "null"]
+        brand:
+          type: ["string", "null"]
+        coverImageUrl:
+          type: ["string", "null"]
+        price:
+          type: number
+        salePrice:
+          type: ["number", "null"]
+        priceUsd:
+          type: ["number", "null"]
+        salePriceUsd:
+          type: ["number", "null"]
+        pricingOptions:
+          type: ["array", "null"]
+          items:
+            $ref: '#/components/schemas/PricingOption'
+        duration:
+          type: string
+        deliveryTime:
+          type: ["string", "null"]
+        activationType:
+          type: ["string", "null"]
+        onCustomerAccount:
+          type: ["boolean", "null"]
+        invitationLink:
+          type: ["string", "null"]
+        licenseKey:
+          type: ["string", "null"]
+        sharedAccount:
+          type: ["boolean", "null"]
+        description:
+          type: ["string", "null"]
+        features:
+          type: ["array", "null"]
+          items:
+            type: string
+        warrantyDuration:
+          type: ["string", "null"]
+        customerInfoRequired:
+          type: ["array", "null"]
+          items:
+            type: string
+        afterPurchaseInstructions:
+          type: ["string", "null"]
+        soldCount:
+          type: number
+        published:
+          type: boolean
+        availability:
+          type: string
+          enum: [in_stock, low_stock, out_of_stock, coming_soon]
+        badges:
+          type: array
+          items:
+            type: string
+            enum: [best_seller, new, flash_sale, limited_stock, popular, best_value]
+        createdAt:
+          type: string
+
+    ProductInput:
+      type: object
+      required:
+        - name
+        - price
+        - duration
+      properties:
+        name:
+          type: string
+          minLength: 1
+        category:
+          type: string
+        brand:
+          type: string
+        coverImageUrl:
+          type: string
+        price:
+          type: number
+          minimum: 0
+        salePrice:
+          type: number
+          minimum: 0
+        priceUsd:
+          type: number
+          minimum: 0
+        salePriceUsd:
+          type: number
+          minimum: 0
+        pricingOptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricingOption'
+        duration:
+          type: string
+          minLength: 1
+        deliveryTime:
+          type: string
+        activationType:
+          type: string
+        onCustomerAccount:
+          type: boolean
+        invitationLink:
+          type: string
+        licenseKey:
+          type: string
+        sharedAccount:
+          type: boolean
+        description:
+          type: string
+        features:
+          type: array
+          items:
+            type: string
+        warrantyDuration:
+          type: string
+        customerInfoRequired:
+          type: array
+          items:
+            type: string
+        afterPurchaseInstructions:
+          type: string
+        availability:
+          type: string
+          enum: [in_stock, low_stock, out_of_stock, coming_soon]
+        badges:
+          type: array
+          items:
+            type: string
+            enum: [best_seller, new, flash_sale, limited_stock, popular, best_value]
+
+    UploadUrlRequest:
+      type: object
+      required: [name, size, contentType]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        size:
+          type: number
+          minimum: 1
+        contentType:
+          type: string
+          minLength: 1
+    UploadUrlResponse:
+      type: object
+      required: [uploadURL, objectPath]
+      properties:
+        uploadURL:
+          type: string
+        objectPath:
+          type: string
+
+    ProductUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        category:
+          type: string
+        brand:
+          type: string
+        coverImageUrl:
+          type: string
+        price:
+          type: number
+          minimum: 0
+        salePrice:
+          type: number
+          minimum: 0
+        priceUsd:
+          type: number
+          minimum: 0
+        salePriceUsd:
+          type: number
+          minimum: 0
+        pricingOptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricingOption'
+        duration:
+          type: string
+          minLength: 1
+        deliveryTime:
+          type: string
+        activationType:
+          type: string
+        onCustomerAccount:
+          type: boolean
+        invitationLink:
+          type: string
+        licenseKey:
+          type: string
+        sharedAccount:
+          type: boolean
+        description:
+          type: string
+        features:
+          type: array
+          items:
+            type: string
+        warrantyDuration:
+          type: string
+        customerInfoRequired:
+          type: array
+          items:
+            type: string
+        afterPurchaseInstructions:
+          type: string
+        availability:
+          type: string
+          enum: [in_stock, low_stock, out_of_stock, coming_soon]
+        badges:
+          type: array
+          items:
+            type: string
+            enum: [best_seller, new, flash_sale, limited_stock, popular, best_value]
+        published:
+          type: boolean
+
+    SetProductPublished:
+      type: object
+      required: [published]
+      properties:
+        published:
+          type: boolean
+
+    Category:
+      type: object
+      required: [id, name, createdAt]
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        createdAt:
+          type: string
+
+    CategoryInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+
+    PromoCode:
+      type: object
+      required: [id, code, percentage, active, createdAt]
+      properties:
+        id:
+          type: number
+        code:
+          type: string
+        percentage:
+          type: number
+          minimum: 1
+          maximum: 100
+        applicableProductIds:
+          type: ["array", "null"]
+          items:
+            type: number
+        active:
+          type: boolean
+        createdAt:
+          type: string
+
+    PromoCodeInput:
+      type: object
+      required: [code, percentage]
+      properties:
+        code:
+          type: string
+          minLength: 1
+        percentage:
+          type: number
+          minimum: 1
+          maximum: 100
+        applicableProductIds:
+          type: array
+          items:
+            type: number
+
+    ValidatePromoCodeRequest:
+      type: object
+      required: [code, productIds]
+      properties:
+        code:
+          type: string
+        productIds:
+          type: array
+          items:
+            type: number
+
+    PromoValidationResult:
+      type: object
+      required: [valid]
+      properties:
+        valid:
+          type: boolean
+        percentage:
+          type: number
+        code:
+          type: string

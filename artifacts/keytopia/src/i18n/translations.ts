@@ -1,0 +1,366 @@
+export type Lang = 'ar' | 'en';
+
+export const translations = {
+  ar: {
+    // Layout / Header
+    tagline: 'مفتاحك للمميزات',
+    cartAriaLabel: 'السلة',
+    adminLogin: 'لوحة الإدارة',
+    allRightsReserved: 'جميع الحقوق محفوظة',
+    toggleLang: 'EN',
+
+    // Hero
+    heroTitle: 'اشتراكات رقمية بأرخص سعر،\nتُسلَّم فوراً.',
+    heroSubtitle: 'وصول رسمي لأفضل الاشتراكات و أدوات الذكاء الاصطناعي والبرامج الإبداعية في العالم العربي.',
+
+    // Trust Badges
+    officialAccess: 'وصول رسمي',
+    instantActivation: 'تفعيل فوري',
+    verifiedPartners: 'شركاء موثقون',
+    support247: 'دعم على مدار الساعة',
+    securePayment: 'دفع آمن',
+
+    // Search
+    searchPlaceholder: 'ابحث عن ChatGPT، Midjourney، Notion...',
+    noProductsTitle: 'لا توجد منتجات',
+    noProductsBody: 'لم نجد أي نتائج مطابقة لـ',
+
+    // Product Card / shared
+    price: 'السعر',
+    addToCart: 'أضف إلى السلة',
+    viewDetails: 'عرض التفاصيل',
+
+    // Product Page
+    backToStore: 'العودة إلى المتجر',
+    subscriptionDuration: 'مدة الاشتراك',
+    whatsIncluded: 'ما يتضمنه المنتج',
+    warranty: 'الضمان',
+    warrantyDetail: 'نضمن عمل الاشتراك طوال مدته. في حال واجهت أي مشكلة، تواصل معنا عبر واتساب وسنحلها فوراً.',
+    activationTime: 'وقت التفعيل',
+    activationTimeDetail: 'فوري — خلال دقائق من تأكيد الطلب',
+    support: 'الدعم',
+    supportDetail: 'دعم على مدار الساعة عبر واتساب',
+    customerInfoRequiredLabel: 'معلومات مطلوبة منك',
+    productNotFound: 'المنتج غير موجود',
+    productNotFoundSub: 'لم نتمكن من إيجاد هذا المنتج.',
+    productLoading: 'جارٍ تحميل المنتج...',
+
+    // Cart
+    yourCart: 'سلتك',
+    cartEmpty: 'سلتك فارغة',
+    cartEmptySub: 'يبدو أنك لم تضف أي شيء بعد.',
+    total: 'الإجمالي',
+    proceedToOrder: 'المتابعة للطلب',
+    priceUpdated: 'تم تحديث بعض الأسعار لتعكس الأسعار الحالية.',
+    checkingPrices: 'جارٍ التحقق من الأسعار...',
+
+    // Checkout — step labels & navigation
+    completeOrder: 'إتمام الطلب',
+    next: 'التالي',
+    back: 'رجوع',
+    optional: 'اختياري',
+
+    // Checkout — step 1 (contact info)
+    fullName: 'الاسم الكامل',
+    fullNamePlaceholder: 'محمد أحمد',
+    emailAddress: 'البريد الإلكتروني',
+    emailPlaceholder: 'example@email.com',
+    phoneNumber: 'رقم الهاتف',
+    phonePlaceholder: '+2010...',
+    whatsappNumber: 'رقم الواتساب',
+    whatsappPlaceholder: '+201...',
+    items: 'المنتجات',
+    sendViaWhatsApp: 'إرسال الطلب عبر واتساب',
+    whatsappNote: 'سيتم تحويلك إلى واتساب لتأكيد الطلب وإتمام الدفع.',
+
+    // Checkout — step 2 (payment method)
+    choosePaymentMethod: 'اختر طريقة الدفع المناسبة لك',
+    instapayDesc: 'ادفع مباشرةً عبر رابط Instapay',
+    vodafoneDesc: 'أرسل المبلغ عبر فودافون كاش',
+    bankTransfer: 'تحويل بنكي',
+    bankDesc: 'تحويل إلى حساب HSBC Egypt',
+    otherMethods: 'طرق دفع أخرى (من خارج مصر)',
+    otherMethodsDesc: 'تحويل دولي أو طرق أخرى — تواصل معنا',
+
+    // Checkout — step 3 (payment proof)
+    paymentProofInstructions: 'أكمل الدفع أدناه ثم أرسل لنا صورة الإيصال عبر واتساب لتأكيد طلبك.',
+    instapayClickLink: 'انقر على الرابط للدفع الفوري عبر Instapay:',
+    payViaInstapay: 'الدفع عبر Instapay',
+    sendToNumber: 'أرسل المبلغ إلى هذا الرقم:',
+    accountNumber: 'رقم الحساب',
+    afterPayment: 'بعد إتمام الدفع',
+    sendProofExplain: 'أرسل لنا صورة إيصال الدفع عبر واتساب لنؤكد طلبك ونبدأ التفعيل.',
+    sendProofViaWhatsApp: 'إرسال إيصال الدفع عبر واتساب',
+
+    // WhatsApp message
+    waOrderFrom: 'طلب جديد من كيتوبيا',
+    waName: 'الاسم',
+    waWhatsApp: 'واتساب',
+    waOrder: 'الطلب',
+    waTotal: 'الإجمالي',
+
+    // Policy page
+    policyLink: 'سياسة الاسترداد والضمان',
+    policyTitle: 'سياسة الاسترداد والضمان',
+    policySubtitle: 'نسعى دائماً لضمان رضاك الكامل عن منتجاتنا الرقمية.',
+    refundPolicyTitle: 'سياسة الاسترداد',
+    refundPolicyContent: 'نظراً لطبيعة المنتجات الرقمية، لا يمكن استرداد الاشتراكات بعد تفعيلها وتسليم بيانات الدخول. ومع ذلك، نلتزم بحل أي مشكلة تقنية تواجهها خلال مدة الاشتراك بالكامل.\n\nفي حال عدم تفعيل الاشتراك خلال 24 ساعة من تأكيد الدفع، يحق لك الحصول على استرداد كامل أو استبدال بمنتج آخر من اختيارك.',
+    warrantyTitle: 'سياسة الضمان',
+    warrantyContent: 'نضمن عمل جميع اشتراكاتنا طوال المدة المحددة عند الشراء. إذا توقف الاشتراك عن العمل لأسباب تتعلق بنا (وليس بسبب انتهاك شروط الاستخدام)، سنقوم بتجديده أو استبداله مجاناً.\n\n• الضمان يشمل: توقف الاشتراك بشكل مفاجئ، تغيير بيانات الدخول بدون إذن منك، عدم عمل الميزات المعلنة.\n• الضمان لا يشمل: انتهاك شروط استخدام المنتج، المشاركة مع أطراف أخرى دون إذن مسبق.',
+    howToClaimTitle: 'كيفية تقديم طلب الضمان أو الاسترداد',
+    howToClaimContent: 'تواصل معنا مباشرةً عبر واتساب مع ذكر اسمك ورقم طلبك ووصف المشكلة. سيقوم فريقنا بالرد والحل خلال ساعات قليلة.',
+    contactViaWhatsApp: 'تواصل معنا عبر واتساب',
+    lastUpdated: 'آخر تحديث',
+
+    // Categories
+    categories: 'الفئات',
+    manageCategories: 'إنشاء وإدارة فئات المنتجات.',
+    addCategory: 'إضافة فئة',
+    categoryName: 'اسم الفئة',
+    noCategories: 'لا توجد فئات بعد.',
+    allCategories: 'الكل',
+
+    // Admin
+    adminAccess: 'لوحة الإدارة',
+    adminAccessSub: 'أدخل الرمز السري للوصول إلى إدارة المنتجات.',
+    enterPin: 'أدخل الرمز السري',
+    unlock: 'فتح',
+    verifying: 'جارٍ التحقق...',
+    products: 'المنتجات',
+    manageProducts: 'إدارة منتجاتك وأسعارها.',
+    addProduct: 'إضافة منتج',
+    searchProducts: 'البحث في المنتجات...',
+    product: 'المنتج',
+    duration: 'المدة',
+    actions: 'الإجراءات',
+    loading: 'جارٍ التحميل...',
+    noProductsAdmin: 'لا توجد منتجات.',
+    lockSession: 'تسجيل الخروج',
+    logOut: 'تسجيل الخروج',
+    noDescription: 'لا يوجد وصف',
+    from: 'من',
+    // Promo codes (admin)
+    promoCodes: 'أكواد الخصم',
+    managePromoCodes: 'إنشاء وإدارة أكواد الخصم.',
+    addPromoCode: 'إضافة كود',
+    promoCodeLabel: 'الكود',
+    discountPercent: 'نسبة الخصم %',
+    applicableProducts: 'المنتجات المشمولة',
+    allProducts: 'جميع المنتجات',
+    noPromoCodes: 'لا توجد أكواد خصم بعد.',
+    // Product visibility
+    published: 'منشور',
+    unpublished: 'مخفي',
+    publish: 'نشر',
+    unpublish: 'إخفاء',
+    // Checkout promo
+    promoCode: 'كود الخصم',
+    promoCodePlaceholder: 'أدخل الكود',
+    applyPromo: 'تطبيق',
+    promoApplied: 'تم تطبيق الخصم',
+    promoInvalid: 'الكود غير صحيح أو لا ينطبق على منتجات سلتك',
+    discount: 'الخصم',
+    waDiscount: 'الخصم',
+    // Cashback
+    cashback: 'كاش باك',
+    cashbackAvailable: 'متاح للاستخدام',
+    cashbackPending: 'قيد المراجعة',
+    cashbackBalance: 'رصيد الكاش باك',
+    cashbackUse: 'استخدم كاش باك',
+    cashbackAmount: 'مبلغ الكاش باك',
+    cashbackApply: 'تطبيق',
+    cashbackApplied: 'تم تطبيق الكاش باك',
+    cashbackInvalid: 'أدخل مبلغاً صحيحاً ضمن رصيدك المتاح وإجمالي الطلب',
+    cashbackTransactions: 'سجل الكاش باك',
+    cashbackNoTransactions: 'لا توجد معاملات كاش باك حتى الآن.',
+    cashbackPendingReview: 'كاش باك بانتظار المراجعة',
+    cashbackPendingReviewSub: 'راجع معاملات الكاش باك المؤهلة واعتمدها لتصبح متاحة للعميل.',
+    cashbackApprove: 'اعتماد الكاش باك',
+    cashbackApproved: 'تم اعتماد الكاش باك',
+    cashbackNoPending: 'لا توجد معاملات كاش باك بانتظار الاعتماد.',
+    cashbackVoided: 'تم إلغاء الكاش باك',
+    cashbackReversed: 'تمت إعادة الكاش باك',
+  },
+  en: {
+    // Layout / Header
+    tagline: 'Your Key to Premium',
+    cartAriaLabel: 'Cart',
+    adminLogin: 'Admin Login',
+    allRightsReserved: 'All rights reserved.',
+    toggleLang: 'عربي',
+
+    // Hero
+    heroTitle: 'Premium Digital Subscriptions,\nDelivered Instantly.',
+    heroSubtitle: "Official access to the world's best AI tools and creative software. Fast, secure, and built for professionals in the Arab world.",
+
+    // Trust Badges
+    officialAccess: 'Official Access',
+    instantActivation: 'Instant Activation',
+    verifiedPartners: 'Verified Partners',
+    support247: '24/7 Support',
+    securePayment: 'Secure Payment',
+
+    // Search
+    searchPlaceholder: 'Search for ChatGPT, Midjourney, Notion...',
+    noProductsTitle: 'No products found',
+    noProductsBody: "We couldn't find anything matching",
+
+    // Product Card / shared
+    price: 'Price',
+    addToCart: 'Add to Cart',
+    viewDetails: 'View Details',
+
+    // Product Page
+    backToStore: 'Back to Store',
+    subscriptionDuration: 'Subscription Duration',
+    whatsIncluded: "What's Included",
+    warranty: 'Warranty',
+    warrantyDetail: 'We guarantee the subscription will work for its full duration. If you run into any issue, contact us on WhatsApp and we\'ll fix it immediately.',
+    activationTime: 'Activation Time',
+    activationTimeDetail: 'Instant — within minutes of order confirmation',
+    support: 'Support',
+    supportDetail: '24/7 support via WhatsApp',
+    customerInfoRequiredLabel: 'Required from you',
+    productNotFound: 'Product not found',
+    productNotFoundSub: "We couldn't find this product.",
+    productLoading: 'Loading product...',
+
+    // Cart
+    yourCart: 'Your Cart',
+    cartEmpty: 'Your cart is empty',
+    cartEmptySub: "Looks like you haven't added anything yet.",
+    total: 'Total',
+    proceedToOrder: 'Proceed to Order',
+    priceUpdated: 'Some prices have been updated to reflect current rates.',
+    checkingPrices: 'Checking prices...',
+
+    // Checkout — step labels & navigation
+    completeOrder: 'Complete Order',
+    next: 'Next',
+    back: 'Back',
+    optional: 'optional',
+
+    // Checkout — step 1 (contact info)
+    fullName: 'Full Name',
+    fullNamePlaceholder: 'John Doe',
+    emailAddress: 'Email Address',
+    emailPlaceholder: 'example@email.com',
+    phoneNumber: 'Phone Number',
+    phonePlaceholder: '+2010...',
+    whatsappNumber: 'WhatsApp Number',
+    whatsappPlaceholder: '+2010...',
+    items: 'Items',
+    sendViaWhatsApp: 'Send Order via WhatsApp',
+    whatsappNote: 'You will be redirected to WhatsApp to confirm and finalize your payment.',
+
+    // Checkout — step 2 (payment method)
+    choosePaymentMethod: 'Choose a payment method that works for you',
+    instapayDesc: 'Pay instantly via Instapay link',
+    vodafoneDesc: 'Send via Vodafone Cash',
+    bankTransfer: 'Bank Transfer',
+    bankDesc: 'Transfer to HSBC Egypt account',
+    otherMethods: 'Other Methods (outside Egypt)',
+    otherMethodsDesc: 'International transfer or other — chat with us',
+
+    // Checkout — step 3 (payment proof)
+    paymentProofInstructions: 'Complete the payment below, then send us a screenshot of the receipt on WhatsApp to confirm your order.',
+    instapayClickLink: 'Click the link to pay instantly via Instapay:',
+    payViaInstapay: 'Pay via Instapay',
+    sendToNumber: 'Send the amount to this number:',
+    accountNumber: 'Account Number',
+    afterPayment: 'After completing payment',
+    sendProofExplain: 'Send us a screenshot of your payment receipt via WhatsApp so we can confirm your order and begin activation.',
+    sendProofViaWhatsApp: 'Send Payment Proof via WhatsApp',
+
+    // WhatsApp message
+    waOrderFrom: 'New Order from Keytopia',
+    waName: 'Name',
+    waWhatsApp: 'WhatsApp',
+    waOrder: 'Order',
+    waTotal: 'Total',
+
+    // Policy page
+    policyLink: 'Refund & Warranty Policy',
+    policyTitle: 'Refund & Warranty Policy',
+    policySubtitle: 'We are committed to your complete satisfaction with every purchase.',
+    refundPolicyTitle: 'Refund Policy',
+    refundPolicyContent: 'Due to the nature of digital products, subscriptions cannot be refunded after activation and delivery of login credentials. However, we commit to resolving any technical issue you encounter for the full duration of your subscription.\n\nIf your subscription has not been activated within 24 hours of confirmed payment, you are entitled to a full refund or an exchange for another product of your choice.',
+    warrantyTitle: 'Warranty Policy',
+    warrantyContent: 'We guarantee all subscriptions will work for their stated duration. If a subscription stops working for reasons attributable to us (not due to a violation of terms of use), we will renew or replace it at no cost.\n\n• Covered: sudden subscription stoppage, unauthorized credential changes, advertised features not working.\n• Not covered: violation of the product\'s terms of service, sharing access with third parties without prior permission.',
+    howToClaimTitle: 'How to Submit a Warranty or Refund Request',
+    howToClaimContent: 'Contact us directly on WhatsApp with your name, order number, and a description of the issue. Our team will respond and resolve it within a few hours.',
+    contactViaWhatsApp: 'Contact Us on WhatsApp',
+    lastUpdated: 'Last updated',
+
+    // Categories
+    categories: 'Categories',
+    manageCategories: 'Create and manage product categories.',
+    addCategory: 'Add Category',
+    categoryName: 'Category Name',
+    noCategories: 'No categories yet.',
+    allCategories: 'All',
+
+    // Admin
+    adminAccess: 'Admin Access',
+    adminAccessSub: 'Enter your PIN to manage the catalog.',
+    enterPin: 'Enter PIN',
+    unlock: 'Unlock',
+    verifying: 'Verifying...',
+    products: 'Products',
+    manageProducts: 'Manage your digital catalog and pricing.',
+    addProduct: 'Add Product',
+    searchProducts: 'Search products...',
+    product: 'Product',
+    duration: 'Duration',
+    actions: 'Actions',
+    loading: 'Loading products...',
+    noProductsAdmin: 'No products found.',
+    lockSession: 'Lock Session',
+    logOut: 'Log Out',
+    noDescription: 'No description',
+    from: 'from',
+    // Promo codes (admin)
+    promoCodes: 'Promo Codes',
+    managePromoCodes: 'Create and manage discount codes.',
+    addPromoCode: 'Add Code',
+    promoCodeLabel: 'Code',
+    discountPercent: 'Discount %',
+    applicableProducts: 'Applicable Products',
+    allProducts: 'All products',
+    noPromoCodes: 'No promo codes yet.',
+    // Product visibility
+    published: 'Published',
+    unpublished: 'Hidden',
+    publish: 'Publish',
+    unpublish: 'Unpublish',
+    // Checkout promo
+    promoCode: 'Promo Code',
+    promoCodePlaceholder: 'Enter code',
+    applyPromo: 'Apply',
+    promoApplied: 'Discount applied',
+    promoInvalid: 'Invalid code or not applicable to your cart',
+    discount: 'Discount',
+    waDiscount: 'Discount',
+    // Cashback
+    cashback: 'Cashback',
+    cashbackAvailable: 'Available to use',
+    cashbackPending: 'Pending review',
+    cashbackBalance: 'Cashback balance',
+    cashbackUse: 'Use cashback',
+    cashbackAmount: 'Cashback amount',
+    cashbackApply: 'Apply',
+    cashbackApplied: 'Cashback applied',
+    cashbackInvalid: 'Enter a valid amount within your available balance and order total',
+    cashbackTransactions: 'Cashback activity',
+    cashbackNoTransactions: 'No cashback transactions yet.',
+    cashbackPendingReview: 'Pending cashback approvals',
+    cashbackPendingReviewSub: 'Review eligible cashback transactions and approve them for customer use.',
+    cashbackApprove: 'Approve cashback',
+    cashbackApproved: 'Cashback approved',
+    cashbackNoPending: 'No cashback transactions are waiting for approval.',
+    cashbackVoided: 'Cashback voided',
+    cashbackReversed: 'Cashback restored',
+  },
+} satisfies Record<Lang, Record<string, string>>;
+
+export type TranslationKey = keyof typeof translations.en;
